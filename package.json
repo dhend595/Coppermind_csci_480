@@ -1,0 +1,14 @@
+{
+  "name": "coppermind",
+  "version": "0.1.0",
+  "description": "Political campaign finance visualization tool",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Douglas Henderson",
+  "license": "MIT"
+}
