@@ -5,13 +5,10 @@
 
 # Dependencies
 node_modules/
-packages/*/node_modules/
 
 # Build output
 dist/
 build/
-packages/*/dist/
-packages/*/build/
 .next/
 
 # Data
