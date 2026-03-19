@@ -1,0 +1,36 @@
+# Environment
+.env
+.env.*
+*.env
+
+# Dependencies
+node_modules/
+packages/*/node_modules/
+
+# Build output
+dist/
+build/
+packages/*/dist/
+packages/*/build/
+.next/
+
+# Data
+data/raw/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# TypeScript
+*.tsbuildinfo
+
+# Test coverage
+coverage/
