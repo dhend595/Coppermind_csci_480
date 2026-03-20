@@ -2,6 +2,7 @@
   "name": "coppermind",
   "version": "0.1.0",
   "description": "Political campaign finance visualization tool",
+  "workspaces": ["client", "server", "shared"],
   "scripts": {
     "test": "jest"
   },
@@ -13,10 +14,12 @@
     "@babel/preset-react": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
     "@eslint/js": "^9.39.4",
+    "@types/jest": "^30.0.0",
     "babel-jest": "^30.3.0",
     "eslint": "^9.39.4",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^17.4.0",
+    "jest": "^30.3.0",
     "jiti": "^2.6.1",
     "typescript-eslint": "^8.57.1"
   }
