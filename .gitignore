@@ -12,7 +12,8 @@ build/
 .next/
 
 # Data
-data/raw/
+data/*
+!data/.gitkeep
 
 # Logs
 *.log
