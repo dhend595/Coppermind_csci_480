@@ -2,7 +2,11 @@
   "name": "coppermind",
   "version": "0.1.0",
   "description": "Political campaign finance visualization tool",
-  "workspaces": ["client", "server", "shared"],
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
   "scripts": {
     "test": "jest"
   },
@@ -21,6 +25,7 @@
     "globals": "^17.4.0",
     "jest": "^30.3.0",
     "jiti": "^2.6.1",
+    "prisma": "^7.5.0",
     "typescript-eslint": "^8.57.1"
   }
 }

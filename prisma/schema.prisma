@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Candidate {
+  candId    String @id @map("cand_id")
+  name      String
+
+  candidacies              Candidacy[]
+  committeeLinks           CandidateCommitteeLinkage[]
+  contributions            Contribution[]
+  connectedCommittees      Committee[]
+
+  @@map("candidates")
+}
+
+model Candidacy {
+  id                      Int       @id @default(autoincrement())
+  candId                  String    @map("cand_id")
+  electionYr              Int       @map("election_yr")
+  office                  String    // H, S, P
+  officeState             String    @map("office_state")
+  officeDistrict          String?   @map("office_district")
+  incumbentChallengerStatus String? @map("incumbent_challenger_status")
+  status                  String?
+  principalCmteId         String?   @map("principal_cmte_id")
+
+  candidate         Candidate  @relation(fields: [candId], references: [candId])
+  principalCommittee Committee? @relation(fields: [principalCmteId], references: [cmteId])
+
+  @@unique([candId, electionYr])
+  @@map("candidacies")
+}
+
+model Committee {
+  cmteId           String  @id @map("cmte_id")
+  name             String
+  treasurer        String?
+  designation      String? // A=authorized, B=lobbyist, D=leadership, J=joint, P=principal, U=unauthorized
+  type             String?
+  party            String?
+  orgType          String? @map("org_type")
+  connectedOrgName String? @map("connected_org_name")
+  connectedCandId  String? @map("connected_cand_id")
+  street1          String?
+  street2          String?
+  city             String?
+  state            String?
+  zip              String?
+
+  connectedCandidate    Candidate?                  @relation(fields: [connectedCandId], references: [candId])
+  candidacies           Candidacy[]
+  committeeLinks        CandidateCommitteeLinkage[]
+  contributionsDonated  Contribution[]              @relation("DonorCommittee")
+  contributionsReceived Contribution[]              @relation("RecipientCommittee")
+  financials            CommitteeFinancials[]
+
+  @@map("committees")
+}
+
+model CandidateCommitteeLinkage {
+  id              Int    @id @default(autoincrement())
+  candId          String @map("cand_id")
+  cmteId          String @map("cmte_id")
+  electionYr      Int    @map("election_yr")
+  fecElectionYr   Int    @map("fec_election_yr")
+  cmteType        String? @map("cmte_type")
+  cmteDesignation String? @map("cmte_designation")
+  linkageId       Int    @unique @map("linkage_id")
+
+  candidate  Candidate @relation(fields: [candId], references: [candId])
+  committee  Committee @relation(fields: [cmteId], references: [cmteId])
+
+  @@map("candidate_committee_linkages")
+}
+
+model Contribution {
+  id              Int      @id @default(autoincrement())
+  tranId          String   @unique @map("tran_id")
+  donorCmteId     String   @map("donor_cmte_id")
+  recipientCmteId String?  @map("recipient_cmte_id")
+  candId          String?  @map("cand_id")
+  transactionDt   DateTime? @map("transaction_dt")
+  transactionAmt  Decimal  @map("transaction_amt") @db.Decimal(12, 2)
+  transactionType String?  @map("transaction_type")
+  transactionPgi  String?  @map("transaction_pgi") // P=primary, G=general, etc.
+  reportType      String?  @map("report_type")
+
+  donorCommittee     Committee  @relation("DonorCommittee", fields: [donorCmteId], references: [cmteId])
+  recipientCommittee Committee? @relation("RecipientCommittee", fields: [recipientCmteId], references: [cmteId])
+  candidate          Candidate? @relation(fields: [candId], references: [candId])
+
+  @@map("contributions")
+}
+
+model CommitteeFinancials {
+  id                  Int      @id @default(autoincrement())
+  cmteId              String   @map("cmte_id")
+  coveredPeriod       DateTime @map("covered_period")
+  ttlReceipts         Decimal? @map("ttl_receipts")         @db.Decimal(14, 2)
+  indvContrib         Decimal? @map("indv_contrib")         @db.Decimal(14, 2)
+  ttlDisbursements    Decimal? @map("ttl_disbursements")    @db.Decimal(14, 2)
+  cohBop              Decimal? @map("coh_bop")              @db.Decimal(14, 2)
+  cohCop              Decimal? @map("coh_cop")              @db.Decimal(14, 2)
+  contribToOtherCmte  Decimal? @map("contrib_to_other_cmte") @db.Decimal(14, 2)
+  indExp              Decimal? @map("ind_exp")              @db.Decimal(14, 2)
+
+  committee Committee @relation(fields: [cmteId], references: [cmteId])
+
+  @@unique([cmteId, coveredPeriod])
+  @@map("committee_financials")
+}
